@@ -9,6 +9,7 @@ export type Config = {
 
 export function setUser(username: string) {
     let cfg: Config = readConfig();
+    console.log(cfg.dbUrl);
     cfg.currentUserName = username;
     
     writeConfig(cfg);
@@ -53,7 +54,7 @@ function validateConfig(rawConfig: any) {
 }
 
 function getConfigFilePath(): string {
-    const configFileName = "gatorconfig.json";
+    const configFileName = ".gatorconfig.json";
     const homeDir = os.homedir();
 
     return path.join(homeDir,configFileName);
