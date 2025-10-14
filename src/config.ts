@@ -2,9 +2,6 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 
-const homePath = os.homedir;
-const gatorConfigPath = homePath + "/BlogAggregator/gatorconfig.json";
-
 export type Config = {
     dbUrl: string,
     currentUserName: string,
@@ -14,24 +11,50 @@ export function setUser(username: string) {
     let cfg: Config = readConfig();
     cfg.currentUserName = username;
     
-    writeJSON(cfg);
+    writeConfig(cfg);
     
 }
 
 export function readConfig(): Config {
-    let cfgJson = fs.readFileSync(gatorConfigPath,'utf-8');
+    const fullPath = getConfigFilePath();
+    let cfgJson = fs.readFileSync(fullPath,'utf-8');
 
-    let configJson = JSON.parse(cfgJson);
+    let data = JSON.parse(cfgJson);
 
-    return configJson;
+    return validateConfig(data);
 }
 
-function writeJSON(cfg: Config) {
+function writeConfig(cfg: Config) {
+    const fullPath = getConfigFilePath();
     let rawConfig = {
         db_url: cfg.dbUrl,
         current_user_name: cfg.currentUserName
     }
 
-    fs.writeFileSync(gatorConfigPath,JSON.stringify(rawConfig));
+    let data = JSON.stringify(rawConfig,null,2);
+    fs.writeFileSync(fullPath,data,{ encoding: "utf-8" });
 }
 
+function validateConfig(rawConfig: any) {
+    if(!rawConfig.db_url || typeof rawConfig.db_url !== "string") {
+        throw new Error("The field db_url needs to be present in the config file");
+    }
+    if(!rawConfig.current_user_name || typeof rawConfig.current_user_name !== "string") {
+        throw new Error("The field current_user_name needs to be present in the config file");
+    }
+
+    const config: Config = {
+        dbUrl: rawConfig.db_url,
+        currentUserName: rawConfig.current_user_name
+    }
+
+    return config;
+
+}
+
+function getConfigFilePath(): string {
+    const configFileName = "gatorconfig.json";
+    const homeDir = os.homedir();
+
+    return path.join(homeDir,configFileName);
+}
