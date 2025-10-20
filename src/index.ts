@@ -1,12 +1,16 @@
 import { argv } from "process";
 import { CommandsRegistry,registerCommand, runCommand } from "./commands/commands";
-import { handlerLogin } from "./commands/users";
+import { handlerLogin, handlerRegister, handlerReset, handlerUsers } from "./commands/users";
+import { handlerAgg } from "./commands/feeds";
 
 let commands: CommandsRegistry = {};
 
 registerCommand(commands,"login",handlerLogin);
-
-console.log(commands);
+registerCommand(commands,"register",handlerRegister);
+registerCommand(commands,"reset",handlerReset);
+registerCommand(commands,"users", handlerUsers);
+registerCommand(commands,"agg",handlerAgg);
+//console.log(commands);
 
 async function main() {
 
@@ -30,4 +34,4 @@ process.exit(0);
 
 }
 
-await main();
+main();
