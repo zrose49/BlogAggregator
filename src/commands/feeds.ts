@@ -1,71 +1,38 @@
-import { channel } from 'diagnostics_channel';
-import {XMLParser} from 'fast-xml-parser';
+import { readConfig } from "src/config";
+import { createFeed, deleteFeeds } from "src/lib/db/queries/feeds";
+import { getUser, getUserID } from "src/lib/db/queries/users";
+import { feeds, users } from "src/lib/db/schema";
 
-type RSSFeed = {
-  channel: {
-    title: string;
-    link: string;
-    description: string;
-    item: RSSItem[];
-  };
-};
+export type Feed = typeof feeds.$inferSelect;
+export type User = typeof users.$inferSelect;
 
-type RSSItem = {
-  title: string;
-  link: string;
-  description: string;
-  pubDate: string;
-};
+export async function addFeed(cmdName:string, feedName: string, url: string) {
 
-let parser = new XMLParser()
+const currentUser = readConfig().currentUserName;
 
-export async function fetchFeed(feedURL: string): Promise<RSSFeed> {
-const response = await fetch(feedURL, 
-    {
-        method: 'GET',
-        headers: {
-            'User-Agent': 'gator',
-            'Content-Type': 'application/xml'
-        }
-    }
-);
-
-const data = await response.text();
-
-let parsedData = parser.parse(data);
-
-//console.log(parsedData);
-
-let RSSitems: RSSItem[] = [];
-let items = [...parsedData.rss.channel.item];
-for(let item of items) {
-    let rssObj: RSSItem = {
-        title: item.title,
-        link: item.link,
-        description: item.description,
-        pubDate: item.pubDate
-    }
-    //console.log(rssObj);
-    RSSitems.push(rssObj);
-}
-//console.log(RSSitems);
-
-let RSSFeed: RSSFeed = {
-    channel: {
-        title: parsedData.rss.channel.title,
-        link: parsedData.rss.channel.link,
-        description: parsedData.rss.channel.description,
-        item: RSSitems
-    }
-} 
-
-return RSSFeed;
+if(!currentUser) {
+    throw new Error("Current user was not found in the config file!");
 }
 
-export async function handlerAgg() {
-    let data = await fetchFeed("https://www.wagslane.dev/index.xml");
-    let itemString = JSON.stringify(data,null,2);
+let userId = await getUserID(currentUser);
+let user = await getUser(currentUser);
+try {
+let feedResult = await createFeed(feedName, url, userId);
 
-    console.log(itemString);
+printFeed(feedResult,user);
+}
+catch(error) {
+    console.error(error);
+}
 
+}
+
+function printFeed(feed: Feed, user: User) {
+console.log(feed);
+console.log(user);
+}
+
+export async function resetFeeds() {
+    await deleteFeeds();
+    console.log("Success!");
 }

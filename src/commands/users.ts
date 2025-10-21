@@ -6,15 +6,15 @@ export async function handlerLogin(cmdName: string, ...args: string[]) {
         throw new Error(`You must enter a username with the ${cmdName} command`);
     }
 
-    let username = args.join('');
+    const username = args[0];
 
     let existingUser = await getUser(username);
     if(!existingUser) {
-        throw new Error("User does not exist! Please register a user first before attempting to login");
+        throw new Error(`User ${username} does not exist! Please register a user first before attempting to login`);
     }
 
     setUser(username);
-    console.log("User has been set");
+    console.log(`User switched successfully to ${username}`);
 }
 
 export async function handlerRegister(cmdName: string, ...args: string[]) {
