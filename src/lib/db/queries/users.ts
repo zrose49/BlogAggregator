@@ -14,11 +14,21 @@ export async function createUser(name: string) {
 
 export async function getUser(name: string) {
   try {
-    const [result] = await db.select({name: users.name}).from(users).where(eq(users.name,name));
+    const [result] = await db.select().from(users).where(eq(users.name,name));
     return result;
   }
   catch(error) {
-    console.error("There was an error retrieving the user");
+    throw new Error("There was an error retrieving the User");
+  }
+}
+
+export async function getUserID(name: string) {
+  try {
+    const [result] = await db.select({id: users.id}).from(users).where(eq(users.name,name));
+    return result.id;
+  }
+  catch(error) {
+    throw new Error("There was an error retrieving the User ID");
   }
 }
 

@@ -1,7 +1,8 @@
 import { argv } from "process";
 import { CommandsRegistry,registerCommand, runCommand } from "./commands/commands";
 import { handlerLogin, handlerRegister, handlerReset, handlerUsers } from "./commands/users";
-import { handlerAgg } from "./commands/feeds";
+import { handlerAgg } from "./commands/aggregrate";
+import { addFeed, resetFeeds } from "./commands/feeds";
 
 let commands: CommandsRegistry = {};
 
@@ -10,7 +11,8 @@ registerCommand(commands,"register",handlerRegister);
 registerCommand(commands,"reset",handlerReset);
 registerCommand(commands,"users", handlerUsers);
 registerCommand(commands,"agg",handlerAgg);
-//console.log(commands);
+registerCommand(commands,"addfeed",addFeed);
+registerCommand(commands,"resetfeeds",resetFeeds);
 
 async function main() {
 
