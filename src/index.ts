@@ -4,6 +4,7 @@ import { handlerLogin, handlerRegister, handlerReset, handlerUsers } from "./com
 import { handlerAgg } from "./commands/aggregrate";
 import { addFeed, feedCommand, resetFeeds } from "./commands/feeds";
 import { feeds } from "./lib/db/schema";
+import { followFeed } from "./commands/follow";
 
 let commands: CommandsRegistry = {};
 
@@ -15,6 +16,7 @@ registerCommand(commands,"agg",handlerAgg);
 registerCommand(commands,"addfeed",addFeed);
 registerCommand(commands,"resetfeeds",resetFeeds);
 registerCommand(commands, "feeds", feedCommand);
+registerCommand(commands,"follow", followFeed);
 
 async function main() {
 

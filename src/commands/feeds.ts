@@ -33,7 +33,6 @@ console.log(user);
 
 export async function feedCommand(_: string) {
 
-
 let feeds = await getFeeds();
 if(feeds.length === 0) {
     console.log("No feeds found!");
