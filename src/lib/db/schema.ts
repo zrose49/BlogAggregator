@@ -35,6 +35,6 @@ export const feed_follows = pgTable("feed_follows", {
     .$onUpdate(() => new Date()),
     user_id: uuid("user_id").notNull().references(() => users.id, {onDelete: 'cascade'}),
     feed_id: uuid("feed_id").notNull().references(() => feeds.id, {onDelete: 'cascade'}),
-}, (table) => {
-    return [{userFeedConstraint: unique('unique_user_id_feed_id').on(table.user_id, table.feed_id)}];
-});
+}, (table) => 
+    [unique('unique_user_id_feed_id').on(table.user_id, table.feed_id)]
+);

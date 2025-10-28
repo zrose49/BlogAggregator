@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1760476204366,
-      "tag": "0000_premium_selene",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1761074961519,
-      "tag": "0001_giant_silvermane",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1761075008520,
-      "tag": "0002_charming_toad_men",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1761585391549,
-      "tag": "0003_mysterious_turbo",
+      "when": 1761622746776,
+      "tag": "0000_needy_captain_stacy",
       "breakpoints": true
     }
   ]
